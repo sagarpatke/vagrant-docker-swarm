@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: true
+  roles:
+    - geerlingguy.docker
+  tasks:
+    - name: copy registries configuration
+      copy:
+        src: files/daemon.json
+        dest: /etc/docker/daemon.json
+      notify: restart docker
+  handlers:
+    - name: restart docker
+      service:
+        name: docker
+        state: restarted
